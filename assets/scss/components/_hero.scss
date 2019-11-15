@@ -1,0 +1,22 @@
+.hero__body {
+  @extend .hero-body;
+  @extend .has-text-centered;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+}
+
+.hero__image-cover {
+  @extend .level-item;
+  background-color: rgba($black, 0.4);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.hero__title {
+  @extend .title;
+  @extend .has-text-white;
+}

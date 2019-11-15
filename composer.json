@@ -1,0 +1,8 @@
+{
+    "name": "ultimate-wp-theme",
+    "autoload": {
+        "psr-4": {
+            "Theme\\": "src/"
+        }
+    }
+}

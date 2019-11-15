@@ -1,0 +1,68 @@
+.header {
+  @extend .hero;
+
+  border-bottom: $color-heliotrope 4px solid;
+  height: auto;
+  display: block;
+  position: relative;
+}
+
+.header__body {
+  @extend .hero-body;
+
+  padding: 0;
+  height: auto;
+  display: block;
+  position: relative;
+}
+
+.header__columns {
+  @extend .columns;
+  width: 100%;
+  margin: 0;
+  height: auto;
+  display: block;
+  position: relative;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.header__column {
+  @extend .column;
+
+  padding: 0;
+
+  @include mobile() {
+    height: 15rem;
+  }
+  @include tablet() {
+    height: 18rem;
+  }
+  @include desktop() {
+    height: 20rem;
+  }
+}
+
+.header__column--card {
+  @include mobile() {
+    height: 25rem;
+  }
+
+  @include tablet() {
+    height: 28rem;
+  }
+
+  @include desktop() {
+    height: 20rem;
+  }
+}
+
+.header__column--full-height {
+  height: 100%;
+
+  @include tablet() {
+    min-height: 100%;
+  }
+}

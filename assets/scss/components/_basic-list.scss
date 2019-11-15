@@ -1,0 +1,14 @@
+.basic-list {
+  list-style: none;
+  margin-top: 0.75rem;
+}
+
+.basic-list__item {
+  a {
+    color: inherit;
+  }
+
+  &:not(:first-child) {
+    margin-top: 0.25rem;
+  }
+}

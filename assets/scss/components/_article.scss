@@ -1,0 +1,22 @@
+.article {
+  p {
+    margin-bottom: 17px;
+    line-height: 1.875rem;
+
+    &.card-footer-item {
+      margin-bottom: 0;
+    }
+  }
+
+  h1, h2, h3, h4, h5 {
+    line-height: 1.5;
+    margin-bottom: 1.5em;
+  }
+}
+
+.article--single-post {
+  padding-bottom: 1rem;
+  a {
+    color: $color-screaming-green;
+  }
+}

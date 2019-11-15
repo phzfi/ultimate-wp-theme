@@ -1,0 +1,28 @@
+.table--centered {
+  margin:auto;
+}
+
+.table__column--fixed-width {
+  min-width: 180px;
+  display: inline-block;
+}
+
+.table__row--with-border {
+  border-bottom: 1px solid rgba($color-light-gray, 0.5);
+}
+
+.table__column--padded {
+  padding: 16px 20px;
+}
+
+.table__column--padded-left {
+  padding-left: 33px;
+}
+
+.table__column--no-borders {
+  border: none;
+}
+
+.table__column--vertical-middle {
+  vertical-align: middle;
+}

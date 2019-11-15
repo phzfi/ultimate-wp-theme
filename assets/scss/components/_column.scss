@@ -1,0 +1,11 @@
+.column--archive-thumbnail {
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+}
+
+.column--vertical-margin {
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}

@@ -1,0 +1,45 @@
+.footer {
+  padding-bottom: 1rem;
+
+  hr {
+    height: 1px;
+  }
+}
+.footer__image {
+  @extend .image;
+  margin: auto;
+}
+
+.footer__bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  a {
+    color: inherit;
+  }
+}
+
+.footer__bottom-left {
+  text-align: left;
+  width: 100%;
+}
+
+.footer__bottom-center {
+  text-align: center;
+  width: 100%;
+}
+
+.footer__bottom-right {
+  text-align: right;
+  width: 100%;
+}
+
+.footer__columns {
+  @include tablet() {
+    justify-content: flex-end;
+  }
+}
+
+.footer__column--align-left {
+  margin-right: auto;
+}

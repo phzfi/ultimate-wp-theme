@@ -1,0 +1,22 @@
+.socialmedia__button{
+  position: relative;
+  float: right;
+  padding: 5px 10px;
+  min-width: 80px;
+  text-align: center;
+  text-transform: capitalize;
+  border: none;
+  color: $color-porcelain;
+
+  &:hover {
+    color: $color-porcelain;
+  }
+}
+
+.socialmedia__link {
+  color: $color-porcelain;
+}
+
+.socialmedia__link:hover {
+  color: $color-porcelain;
+}

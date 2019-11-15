@@ -1,0 +1,44 @@
+.navbar {
+  @extend .navbar;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: $navbar-bottom-border-height;
+    background-color: $color-heliotrope;
+    display: block;
+  }
+}
+
+.navbar__dropdown {
+  @extend .navbar-item;
+  @extend .has-dropdown;
+
+  &:hover {
+    >.navbar-link {
+      color: $navbar-item-hover-color;
+    }
+  }
+}
+
+.navbar__dropdown-items {
+  @extend .navbar-dropdown;
+
+  top: 52px - $navbar-bottom-border-height;
+}
+
+.navbar__logo {
+  height: $navbar-height;
+  width: auto;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.navbar--adminbar-fixed-top {
+  margin-top: $adminbar-height;
+}
