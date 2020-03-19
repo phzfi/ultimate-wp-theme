@@ -3,8 +3,8 @@
 Library         SeleniumLibrary
 Library         String
 Resource        ../resources/resources.robot
-#Test Setup       Go To Register Form
 Suite Setup      Start Application
+#Test Setup       Go To Register Form
 Suite Teardown   Close Application
 
 *** Test Cases ***
@@ -34,7 +34,8 @@ Should exercise Search functionality
     Press Keys   class=searchform__input   \\13
     Wait Until Page Contains    Hätinen
 
-
+Should count readlinks in Head section
+     Should Contain X Times     class=header      class=card__body    4
 
 
 
