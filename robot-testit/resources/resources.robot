@@ -11,6 +11,8 @@ ${Site_title}       Etusivu - PHZ.FI - Kestävän elinkaaren ohjelmistokehitys
 ${Main_Navbar}      id=main-navbar
 ${Logo_Navbar}                class=navbar__logo
 ${Services_Navbar}       class=navbar-item.Palvelut
+${SoftDev_Navbar}     xpath=//*[@id="main-navbar"]/div[1]/div/div/a[1]
+${GuiDesign_Navbar}     xpath=//*[@id="main-navbar"]/div[1]/div/div/a[2]
 ${Values_Navbar}       class=navbar-item.Arvot
 ${Jobs_Navbar}       class=navbar-item.Työpaikat
 ${Contact_Navbar}       class=navbar-item.Yhteystiedot
@@ -57,8 +59,12 @@ Close cookies disclaimer
 Go to footer
     Scroll Element Into View      ${Footer_section}
 
-Open Navbar Links
+Open Navbar Links Template
     [Arguments]     ${TestDescription}     ${navbar_link}   ${target_url}  ${target_obj}
+    Open Navbar Links   ${navbar_link}   ${target_url}  ${target_obj}
+
+Open Navbar Links
+    [Arguments]    ${navbar_link}   ${target_url}  ${target_obj}
     Wait Until Element Is Visible      ${Main_Navbar}
     Click Element               ${navbar_link}
     Location Should Contain     ${target_url}
