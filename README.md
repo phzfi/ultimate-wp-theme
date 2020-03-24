@@ -1,5 +1,13 @@
 # Apprien's Wordpress theme
 This is one of the first actually great Wordpress themes created inside the PHZ offices.
+  
+## Requirements
+ - [Virtualbox](https://www.virtualbox.org)
+ - [Vagrant](https://www.vagrantup.com/)
+ - [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
+   
+## Initial steps
+1. `vagrant up`
 
 ## Concept
     
