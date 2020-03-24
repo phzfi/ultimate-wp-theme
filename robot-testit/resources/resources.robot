@@ -10,7 +10,7 @@ ${DELAY}         	0
 ${Site_title}       Etusivu - PHZ.FI - Kestävän elinkaaren ohjelmistokehitys
 ${Main_Navbar}      id=main-navbar
 ${Logo_Navbar}                class=navbar__logo
-${Services_Navbar}       class=navbar-item.Palvelut
+${Services_Navbar}       xpath=//*[@id="main-navbar"]/div[1]/div/a    #class=navbar-item.Palvelut
 ${SoftDev_Navbar}     xpath=//*[@id="main-navbar"]/div[1]/div/div/a[1]
 ${GuiDesign_Navbar}     xpath=//*[@id="main-navbar"]/div[1]/div/div/a[2]
 ${Values_Navbar}       class=navbar-item.Arvot
@@ -19,7 +19,8 @@ ${Contact_Navbar}       class=navbar-item.Yhteystiedot
 ${eSports_Navbar}       class=navbar-item.eSports
 ${Apprien_Navbar}       class=navbar-item.Apprien
 ${Games_Navbar}       class=navbar-item.PHZ.Game.Studios
-
+${Search_Navbar}      class=searchform__input
+${Burger_Navbar}     class=navbar-burger
 ${Cookies_Btn}      class=easy-cookies-policy-accept
 ${eSport_link}      xpath=/html/body/footer/div/div[1]/div[2]/ul/li[1]/a
 ${Prods_link}       xpath=/html/body/footer/div/div[1]/div[2]/ul/li[2]/a
@@ -71,6 +72,26 @@ Open Navbar Links
     Wait Until Page Contains    ${target_obj}
     Go Back
     Wait Until Page Contains Element     ${Main_Navbar}
+
+Open Burger-menu Links
+    [Arguments]     ${TestDescription}   ${burger_link}   ${target_url}  ${target_obj}
+    Set Window Size	    800	    600
+    Wait Until Page Contains Element   ${Burger_Navbar}
+    Click Element       ${Burger_Navbar}
+    Click Element       ${burger_link}
+    Location Should Contain     ${target_url}
+    Wait Until Page Contains    ${target_obj}
+    Go Back
+
+
+
+Search Text In Page
+     [Arguments]     ${search_locator}     ${search_term}     ${found_term}
+    Click Element       ${search_locator}
+    Input Text          ${search_locator}     ${search_term}
+    Press Keys          ${search_locator}     \\13
+    Wait Until Page Contains    ${found_term}
+
 
 Open footer links
     [Arguments]     ${TestDescription}     ${footer_link}     ${target_obj}
