@@ -4,6 +4,7 @@
 @import './core/social-media-helpers';
 @import './core/variables';
 @import './core/bulma-overrides';
+@import './core/images';
 
 // Frameworks
 @import '../../node_modules/bulma/bulma';
@@ -34,6 +35,9 @@ $fa-font-path: "../../../node_modules/font-awesome/fonts";
 
 // WordPress related stuff
 @import './core/wordpress_core';
+
+// Scroller font
+@import url(https://fonts.googleapis.com/css?family=Josefin+Sans:300,400);
 
 // Generic
 body, html {

@@ -1,4 +1,5 @@
 <?php
+
 namespace Theme\Cards\Areas;
 
 use Theme\Cards\CardTypes\AddCardType;
@@ -7,96 +8,263 @@ use Theme\Cards\CardTypes\GridCardType;
 use Theme\Cards\CardTypes\PlayerCardType;
 use Theme\Customizer\Customizer;
 
-class GridCard {
+class GridCard
+{
 
-    protected $query;
+  /** @var \WP_Query  */
+  protected $query_large;
+  protected $query_small;
 
-    public function __construct()
-    {
-        $args = array(
-            'ignore_sticky_posts' => 1,
-            'offset' => 6
-        );
-        $this->query = new \WP_Query($args);
+  // how many items per block?
+  protected $large_post_amount = 2;
+  protected $small_post_amount = 6;
+
+
+  /**
+   * GridCard constructor.
+   */
+  public function __construct()
+  {
+
+    // settings for queries
+    $args_large = [
+      'offset'              => 0,
+      'posts_per_page'      => 2,
+      'ignore_sticky_posts' => 0,
+    ];
+    $args_small = [
+      'ignore_sticky_posts' => 1,
+      // 'offset' => 2,
+      'posts_per_page'      => 6,
+    ];
+
+    // init queries
+    $this->query_large = new \WP_Query($args_large);
+    $this->query_small = new \WP_Query($args_small);
+  }
+
+  public function render()
+  {
+
+    // get html for large articles
+    $large_html = $this->getLargeHTML($this->query_large->posts);
+
+    /* Restore original Post Data
+   * NB: Because we are using new WP_Query we aren't stomping on the
+   * original $wp_query and it does not need to be reset with
+   * wp_reset_query(). We just need to set the post data back up with
+   * wp_reset_postdata().
+   */
+    wp_reset_postdata();
+
+    // get html for small posts
+    $small_html = $this->getSmallHTML($this->query_small->posts);
+
+    // set container
+    $text = "
+      <section class=\"section front-page-articles\">
+          <div class=\"container\">
+              <div class=\"columns\">
+                  " . $large_html . "                   
+                  " . $small_html . "                   
+              </div>
+          </div>
+      </section>
+      ";
+
+    // print out section
+    print($text);
+  }
+
+  /**
+   * Extract images from posts.
+   *
+   * @param $post
+   *
+   * @return array
+   */
+  public function postExtractImages($post): array
+  {
+    // settings and query
+    $args            = [
+      'post_type'      => 'attachment',
+      'post_mime_type' => 'image',
+      'numberposts'    => -1,
+      'post_status'    => NULL,
+      'post_parent'    => $post->ID,
+    ];
+    $attached_images = get_posts($args);
+    $first_image     = reset($attached_images);
+    // return all & first image
+    return [$attached_images, $first_image];
+  }
+
+  /**
+   * Exctract tags from posts
+   *
+   * @param $post
+   *
+   * @return string
+   */
+  public function postExtractTags($post): string
+  {
+    $tags_html = "";
+    $post_tags = get_the_tags($post->ID);
+    if (is_array($post_tags)) {
+      foreach ($post_tags as $tag) {
+        $tag_link  = get_term_link($tag);
+        $tag_html  = "
+                <a href=\"" . $tag_link . "\">#" . $tag->name . "</a>
+            ";
+        $tags_html .= $tag_html;
+      }
     }
+    return $tags_html;
+  }
 
-    public function render() {
+  /**
+   *  Build and return html for large posts
+   *
+   * @return string
+   * @throws \Exception
+   */
+  public function getLargeHTML($posts): string
+  {
+    $large_parts = "";
+    $large_index = 0;
+    // loop items
+    while ($large_index < $this->large_post_amount) {
+      // get current post
+      $post = $posts[$large_index];
+      // extract data
+      $post_date      = new \DateTime($post->post_date);
+      $post_author_id = $post->post_author;
+      // images
+      [$post_images, $first_image] = $this->postExtractImages($post);
+      // tags
+      $tags_html = $this->postExtractTags($post);
+      // link to post
+      $post_link = get_post_permalink($post->ID);
+      // buiold html
+      $part = "
+            <div class=\"column is-four-fifths is-offset-one-fifth\">
+                <div class=\"card\">
+                    <div class=\"card-image\">
+                        <figure class=\"image is-4by3\">
+                            <img src=\"" . $first_image->guid . "\" alt=\"" . $first_image->post_title . "\">
+                        </figure>
+                    </div>
+                    <div class=\"card-content\">
+                        <div class=\"media\">
+                            <div class=\"media-content\">
+                                <h4 class=\"subtitle is-4\">
+                                    <a href=\"" . $post_link . "\">" . $post->post_title . "</a>
+                                </h4>
+                                <span class=\"author\">
+                                    <time datetime=\"" . $post_date->format('Y-m-d') . "\">" . $post_date->format('d.m.Y') . "
+                                    By <a href=\"#\">" . get_the_author_meta(
+        'display_name',
+        $post_author_id
+      ) . "</a>
+                                </span>
+                            </div>
+                        </div>
 
-        $options_state = Customizer::$WP_CUSTOMIZE != null ? Customizer::$WP_CUSTOMIZE->unsanitized_post_values() : [];
-
-        $gridRowAmount = (int) isset($options_state['grid_row_amount']) ? $options_state['grid_row_amount'] : get_theme_mod('grid_row_amount', 3);
-
-        $playerCardSet = isset($options_state['player_card']) ? $options_state['player_card'] : get_theme_mod('player_card', 0);
-        $playerCardAlign = isset($options_state['player_card_align']) ? $options_state['player_card_align'] : get_theme_mod('player_card_align', 2);
-        $playerCardRow = isset($options_state['player_card_row']) ? $options_state['player_card_row'] : get_theme_mod('player_card_row', 2);
-        $playerCardPosition = $playerCardRow * 3 + 5 - $playerCardAlign;
-        $playerCardUser = isset($options_state['player_card_user']) ? $options_state['player_card_user'] : get_theme_mod('player_card_user', '');
-
-        $doubleWideSet = isset($options_state['double_wide']) ? $options_state['double_wide'] : get_theme_mod('double_wide', 0);
-        $doubleWideAlign = isset($options_state['double_wide_align']) ? $options_state['double_wide_align'] : get_theme_mod('double_wide_align', 2);
-        $doubleWideRow = isset($options_state['double_wide_row']) ? $options_state['double_wide_row'] : get_theme_mod('double_wide_row', 2);
-
-        if($playerCardSet == 1 && $playerCardRow < $doubleWideRow) {
-            $doubleWidePosition = $playerCardPosition + 3 * ($doubleWideRow - $playerCardRow)  - ($doubleWideAlign + (2- $playerCardAlign) );
-        } else if ($playerCardSet == 1 && $playerCardRow == $doubleWideRow){
-            $doubleWidePosition = $playerCardPosition - $doubleWideAlign + 2;
-        } else {
-            $doubleWidePosition = $doubleWideRow * 3 + 5 - $doubleWideAlign;
-        }
-
-        // This calculates the correct number of articles to be shown. Each grid holds 3 articles, player card takes too slots and 6 for the offset
-        $articleCount = $gridRowAmount * 3 - (2 * $playerCardSet) + 6;
-        $gridCard = new GridCardType();
-        $playerCard = new PlayerCardType();
-        $doubleWideCard = new DoubleWideType();
-        $addCard = new AddCardType();
-        if ( $this->query->have_posts() ) {
-            if($this->query->found_posts > 6) { ?>
-                <section class="section">
-                    <div class="container">
-                        <div class="columns is-multiline">
-                            <?php
-                            for ($i = 6; $i < min($articleCount, $this->query->found_posts); $i++) {
-                                $this->query->the_post();
-
-                                // Player card isn't an article so we dont have to skip a post.
-                                if($playerCardSet == 1 && $i == $playerCardPosition && $playerCardUser != '') {
-                                    $playerCard->render($playerCardUser);
-                                }
-                                if ($doubleWideSet == 1 && $i == $doubleWidePosition) {
-                                    $doubleWideCard->render(
-                                        esc_url(get_the_permalink()),
-                                        get_the_post_thumbnail_url(get_the_ID(), 'medium'),
-                                        esc_html(get_the_title()),
-                                        esc_html(get_the_excerpt()),
-                                        $i
-                                    );
-                                    $i++;
-
-                                } else {
-                                    if(get_post_meta(get_the_ID(),'_only_image', true ) == 1) {
-                                        $addCard->render(
-                                            get_the_post_thumbnail_url(get_the_ID(), 'medium'),
-                                            $i
-                                        );
-                                    } else {
-                                        $gridCard->render(
-                                            esc_url(get_the_permalink()),
-                                            get_the_post_thumbnail_url(get_the_ID(), 'medium'),
-                                            esc_html(get_the_title()),
-                                            esc_html(get_the_excerpt()),
-                                            get_post_meta(get_the_ID(),'_only_image', true ),
-                                            $i
-                                        );
-                                    }
-                                }
-                            }
-                            ?>
+                        <div class=\"content\">
+                           " . $post->post_excerpt . "
+                            " . $tags_html . "
                         </div>
                     </div>
-                </section>
-                <?php
-            }
-        }
+                </div>
+            </div>
+                ";
+
+      $large_index++;
+      $large_parts .= $part;
     }
+
+    $large_html = "
+        <div class=\"column is-half big-lift\">
+<!--
+            <h3 class=\"title\">Tärkeät artikkelit</h3>
+-->
+            " . $large_parts . "
+        </div>
+    ";
+
+    // return html
+    return $large_html;
+  }
+
+  /**
+   * Build & return html for small parts
+   *
+   * @return string
+   * @throws \Exception
+   */
+  public function getSmallHTML($posts): string
+  {
+    $small_parts = "";
+    $small_index = 0;
+    // loop items
+    while ($small_index < $this->small_post_amount) {
+
+      $post = $posts[$small_index];
+      $post_date      = new \DateTime($post->post_date);
+      $post_author_id = $post->post_author;
+      [$post_images, $first_image] = $this->postExtractImages($post);
+
+      $tags_html = $this->postExtractTags($post);
+
+      $post_link = get_post_permalink($post->ID);
+
+      if ($first_image) {
+        $imgstring = "<img src=\"" . $first_image->guid . "\" alt=\"" . $first_image->post_title . "\">";
+      } else {
+        $imgstring = '';
+      }
+
+      $part = "  
+        <article class=\"media\">
+            <figure class=\"media-left\">
+                <p class=\"image is-128x128\">
+                    " . $imgstring . "
+                </p>
+            </figure>
+            <div class=\"media-content\">
+                <div class=\"content\">
+                    <h4 class=\"subtitle is-4\">
+                        <a href=\"" . $post_link . "\">" . $post->post_title . "</a>
+                    </h4>
+                    <span class=\"author\">
+                        <time datetime=\"" . $post_date->format('Y-m-d') . "\">" . $post_date->format('d.m.Y') . " 
+                        By <a href=\"#\">" . get_the_author_meta(
+        'display_name',
+        $post_author_id
+      ) . "</a>
+                        </span>
+                    <div class='content'>
+                     " . $post->post_excerpt . "
+                     " . $tags_html . "
+                    </div>
+                </div>
+            </div>
+        </article>
+        ";
+
+      $small_index++;
+      $small_parts .= $part;
+    }
+
+    $small_html = "
+        <div class=\"column is-half small-lift\">
+<!--
+            <h3 class=\"title\">Ehkä pelaajakorttinostot?</h3>
+-->
+            " . $small_parts . "
+        </div>
+    ";
+
+    return $small_html;
+  }
 }

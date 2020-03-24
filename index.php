@@ -1,4 +1,9 @@
-<?php get_header(); ?>
+<?php
+
+
+get_header();
+
+?>
 <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
     <header class="hero is-medium">
         <div class="hero__body" style="background-image: url('<?php if(has_post_thumbnail()) echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'large')); else echo get_option('default_featured_image'); ?>');">

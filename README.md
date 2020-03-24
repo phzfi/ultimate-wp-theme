@@ -1,5 +1,5 @@
-# Ultimate Wordpress Theme
-This is one of the first actually great Wordpress themes created at PHZ Full Stack Oy.
+# Apprien's Wordpress theme
+This is one of the first actually great Wordpress themes created inside the PHZ offices.
   
 ## Requirements
  - [Virtualbox](https://www.virtualbox.org)

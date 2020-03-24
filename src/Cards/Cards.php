@@ -21,8 +21,8 @@ class Cards implements Actions, Render
     protected $cards = [];
     public function __construct()
     {
-        $this->cards['header'] = new HeaderCard();
-        $this->cards['grid'] = new GridCard();
+        #$this->cards['header'] = new HeaderCard();
+        #$this->cards['grid'] = new GridCard();
     }
 
     /**
@@ -33,7 +33,6 @@ class Cards implements Actions, Render
      */
     public function actions(...$args)
     {
-
     }
 
 
@@ -45,8 +44,6 @@ class Cards implements Actions, Render
      */
     public function render(...$id)
     {
-        $this->cards[$id[0]]->render();
+        # $this->cards[$id[0]]->render();
     }
-
 }
-

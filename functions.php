@@ -1,19 +1,23 @@
 <?php
 
-require __DIR__.'/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Theme\Theme;
+use Theme\Actions;
 
-function addAction(string $id, array $callback, int $priority = 10) {
+function addAction(string $id, array $callback, int $priority = 10)
+{
     add_action($id, $callback, $priority);
 }
 
-function updateUserMeta($user_id, string $name){
-    update_user_meta( $user_id, $name, $_POST[$name] );
+function updateUserMeta($user_id, string $name)
+{
+    update_user_meta($user_id, $name, $_POST[$name]);
 }
 
-function updatePostMeta($post_id, string $name, $post){
-    update_post_meta( $post_id, $name, $post );
+function updatePostMeta($post_id, string $name, $post)
+{
+    update_post_meta($post_id, $name, $post);
 }
 
 $theme = new Theme();
@@ -23,41 +27,50 @@ require_once('src/NavWalker.php');
 require_once('src/FooterWalker.php');
 
 
-add_theme_support( 'post-thumbnails' );
-add_theme_support( 'title-tag' );
-add_theme_support( 'custom-logo',
+add_theme_support('post-thumbnails');
+add_theme_support('title-tag');
+add_theme_support(
+    'custom-logo',
     array(
         'height'      => 200,
         'width'       => 496,
         'flex-height' => true,
         'flex-width'  => true
-    ));
+    )
+);
+
+// add support for page excerpts.
+add_post_type_support('page', 'excerpt');
 
 // Register nav menus
-function register_navigation() {
+function register_navigation()
+{
     register_nav_menus([
-        'navbar-left' => __( 'Navbar Menu Left' ),
-        'navbar-right' => __( 'Navbar Menu Right' ),
-        'footer-pages' => __( 'Footer Pages' ),
-        'footer-technical' => __( 'Footer Technical' ),
-        'footer-social-media' => __( 'Footer Social Media' ),
-        'footer-help' => __( 'Footer Help' )
-  ]);
+        'navbar-left' => __('Navbar Menu Left'),
+        'navbar-right' => __('Navbar Menu Right'),
+        'footer-pages' => __('Footer Pages'),
+        'footer-technical' => __('Footer Technical'),
+        'footer-social-media' => __('Footer Social Media'),
+        'footer-help' => __('Footer Help')
+    ]);
 }
-add_action( 'init', 'register_navigation' );
+add_action('init', 'register_navigation');
 
 add_filter('previous_posts_link_attributes', 'posts_link_attributes_previous');
 add_filter('next_posts_link_attributes', 'posts_link_attributes_next');
 
-function posts_link_attributes_previous() {
+function posts_link_attributes_previous()
+{
     return 'class="pagination-previous"';
 }
 
-function posts_link_attributes_next() {
+function posts_link_attributes_next()
+{
     return 'class="pagination-next"';
 }
 
-function theme_settings_page() {
+function theme_settings_page()
+{
 ?>
     <div class="wrap">
         <h1>Theme settings</h1>
@@ -72,44 +85,51 @@ function theme_settings_page() {
 <?php
 }
 
-function add_theme_menu_item() {
+function add_theme_menu_item()
+{
     add_menu_page('Theme settings', 'Theme settings', 'manage_options', 'theme-panel', 'theme_settings_page', null, 99);
 }
 
 add_action('admin_menu', 'add_theme_menu_item');
 
-function display_keywords_element() {
+function display_keywords_element()
+{
 ?>
-    <input type="text" name="page_keywords" id="page_keywords" value="<?php echo get_option('page_keywords'); ?>" /> <i>e.g. Ultimate, Theme, Wordpress</i>...
+    <input type="text" name="page_keywords" id="page_keywords" value="<?php echo get_option('page_keywords'); ?>" /> <i>e.g. Apprien, Automatic Pricing, SaaS</i>...
 <?php
 }
 
-function display_featured_image_element() {
-    ?>
+function display_featured_image_element()
+{
+?>
     <input type="text" name="default_featured_image" id="default_featured_image" value="<?php echo get_option('default_featured_image'); ?>" /> <i>Url to default featured image</i>
 <?php
 }
 
-function display_footer_content_left() {
-    ?>
+function display_footer_content_left()
+{
+?>
     <textarea name="footer_content_left" id="footer_content_left"><?php echo get_option('footer_content_left'); ?></textarea>
 <?php
 }
 
-function display_footer_content_center() {
-    ?>
+function display_footer_content_center()
+{
+?>
     <textarea name="footer_content_center" id="footer_content_center"><?php echo get_option('footer_content_center'); ?></textarea>
-    <?php
+<?php
 }
 
 
-function display_footer_content_right() {
-    ?>
+function display_footer_content_right()
+{
+?>
     <textarea name="footer_content_right" id="footer_content_right"><?php echo get_option('footer_content_right'); ?></textarea>
 <?php
 }
 
-function display_theme_settings_fields() {
+function display_theme_settings_fields()
+{
     add_settings_section('section', 'All Settings', null, 'theme-options');
     add_settings_field('page_keywords', 'Page keywords', 'display_keywords_element', 'theme-options', 'section');
     register_setting('section', 'page_keywords');
@@ -120,87 +140,89 @@ function display_theme_settings_fields() {
 add_action('admin_init', 'display_theme_settings_fields');
 
 // https://www.wpbeginner.com/wp-themes/how-to-add-numeric-pagination-in-your-wordpress-theme/
-function numeric_posts_nav() {
+function numeric_posts_nav()
+{
 
-    if( is_singular() )
+    if (is_singular())
         return;
 
     global $wp_query;
 
     /** Stop execution if there's only 1 page */
-    if( $wp_query->max_num_pages <= 1 )
+    if ($wp_query->max_num_pages <= 1)
         return;
 
-    $paged = get_query_var( 'paged' ) ? absint( get_query_var( 'paged' ) ) : 1;
-    $max   = intval( $wp_query->max_num_pages );
+    $paged = get_query_var('paged') ? absint(get_query_var('paged')) : 1;
+    $max   = intval($wp_query->max_num_pages);
 
     /** Add current page to the array */
-    if ( $paged >= 1 )
+    if ($paged >= 1)
         $links[] = $paged;
 
     /** Add the pages around the current page to the array */
-    if ( $paged >= 3 ) {
+    if ($paged >= 3) {
         $links[] = $paged - 1;
         $links[] = $paged - 2;
     }
 
-    if ( ( $paged + 2 ) <= $max ) {
+    if (($paged + 2) <= $max) {
         $links[] = $paged + 2;
         $links[] = $paged + 1;
     }
 
-    if ( get_previous_posts_link() )
+    if (get_previous_posts_link())
         previous_posts_link('Newer posts');
 
     echo '<ul class="pagination-list">' . "\n";
 
     /** Link to first page, plus ellipses if necessary */
-    if ( ! in_array( 1, $links ) ) {
+    if (!in_array(1, $links)) {
         $class = 1 == $paged ? ' is-current' : '';
 
-        printf( '<li><a class="pagination-link%s" href="%s" aria-label="Goto page 1">%s</a></li>' . "\n", $class, esc_url( get_pagenum_link( 1 ) ), '1' );
+        printf('<li><a class="pagination-link%s" href="%s" aria-label="Goto page 1">%s</a></li>' . "\n", $class, esc_url(get_pagenum_link(1)), '1');
 
-        if ( ! in_array( 2, $links ) )
+        if (!in_array(2, $links))
             echo '<li><span class="pagination-ellipsis">&hellip;</span></li>';
     }
 
     /** Link to current page, plus 2 pages in either direction if necessary */
-    sort( $links );
-    foreach ( (array) $links as $link ) {
+    sort($links);
+    foreach ((array) $links as $link) {
         $class = $paged == $link ? ' is-current' : '';
-        printf( '<li><a class="pagination-link%s" href="%s" aria-label="Goto page %s">%s</a></li>' . "\n", $class, esc_url( get_pagenum_link( $link ) ), $link, $link );
+        printf('<li><a class="pagination-link%s" href="%s" aria-label="Goto page %s">%s</a></li>' . "\n", $class, esc_url(get_pagenum_link($link)), $link, $link);
     }
 
     /** Link to last page, plus ellipses if necessary */
-    if ( ! in_array( $max, $links ) ) {
-        if ( ! in_array( $max - 1, $links ) )
+    if (!in_array($max, $links)) {
+        if (!in_array($max - 1, $links))
             echo '<li><span class="pagination-ellipsis">&hellip;</span></li>' . "\n";
 
         $class = $paged == $max ? ' is-current' : '';
-        printf( '<li><a class="pagination-link%s" href="%s" aria-label="Goto page %s">%s</a></li>' . "\n", $class, esc_url( get_pagenum_link( $max ) ), $max, $max );
+        printf('<li><a class="pagination-link%s" href="%s" aria-label="Goto page %s">%s</a></li>' . "\n", $class, esc_url(get_pagenum_link($max)), $max, $max);
     }
 
     echo '</ul>' . "\n";
 
-    if ( get_next_posts_link() )
+    if (get_next_posts_link())
         next_posts_link('Older posts');
 }
 
 /**
  * Proper way to enqueue scripts and styles
  */
-function styles() {
-    wp_enqueue_style( 'app-styling', get_template_directory_uri() . '/app.css');
+function styles()
+{
+    wp_enqueue_style('app-styling', get_template_directory_uri() . '/app.css');
 }
-add_action( 'wp_enqueue_scripts', 'styles' );
+add_action('wp_enqueue_scripts', 'styles');
 
-add_filter( 'wp_nav_menu_items','add_search_box', 10, 2 );
-function add_search_box( $items, $args ) {
-    if ($args->theme_location=="navbar-right"){
-        $items .= get_search_form( false );
+add_filter('wp_nav_menu_items', 'add_search_box', 10, 2);
+function add_search_box($items, $args)
+{
+    if ($args->theme_location == "navbar-right") {
+        $items .= get_search_form(false);
     }
-        return $items;
+    return $items;
 }
 
 ?>
-

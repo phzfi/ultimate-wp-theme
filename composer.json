@@ -1,5 +1,5 @@
 {
-    "name": "ultimate-wp-theme",
+    "name": "phz/theme",
     "autoload": {
         "psr-4": {
             "Theme\\": "src/"

@@ -41,5 +41,6 @@
 }
 
 .gform_button {
-  @extend .button.is-link;
+  @extend .button;
+  background-color: $color-button-link;
 }

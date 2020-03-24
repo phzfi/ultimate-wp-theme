@@ -9,3 +9,6 @@ app.css
 admin.js
 
 /vendor/
+
+assets/plugins
+assets/uploads

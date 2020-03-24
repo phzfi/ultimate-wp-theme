@@ -1,5 +1,6 @@
 .header {
   @extend .hero;
+  @extend .is-fullheight-with-navbar !optional;
 
   border-bottom: $color-heliotrope 4px solid;
   height: auto;
@@ -11,21 +12,50 @@
   @extend .hero-body;
 
   padding: 0;
-  height: auto;
+  height: 100%;
   display: block;
   position: relative;
+
+  #scroller a {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    z-index: 2;
+    display: inline-block;
+    -webkit-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+    color: #fff;
+    font : normal 400 20px/1 'Josefin Sans', sans-serif;
+    letter-spacing: .1em;
+    text-decoration: none;
+    transition: opacity .3s;
+  }
+  #scroller a:hover {
+    opacity: .5;
+  }
+
 }
 
 .header__columns {
   @extend .columns;
   width: 100%;
   margin: 0;
-  height: auto;
+  height: 100%;
   display: block;
   position: relative;
 
+
   &:last-child {
     margin-bottom: 0;
+  }
+
+  @include tablet() {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @include desktop(){
+    flex-direction: row;
   }
 }
 
@@ -34,14 +64,87 @@
 
   padding: 0;
 
+  &.top-row-1st {
+    background-image: $values-image;
+    background-size: cover  ;
+  }
+
+  &.top-row-2nd {
+    background-image: $gamercard-image;
+    background-size: cover  ;
+  }
+
+  &.bot-row-1st {
+    background-image: $open-positions-image;
+    background-size: cover  ;
+  }
+
+  &.bot-row-2nd {
+    background-image: $customer-section-image;
+    background-size: cover  ;
+  }
+
+  span.box-header {
+    top: 50%;
+    left: 25%;
+    color: $color-header-box;
+  }
+
+  span.box-hover {
+    display: none;
+    height: 100%;
+    padding: 5em;
+    opacity: 0.7;
+  }
+
+
+  &:hover {
+    span.box-header {
+      display: none;
+    }
+    span.box-hover {
+      display: block;
+      color: $color-header-box;
+      background-color: $color-header-box-hover;
+    }
+  }
+
+  /**
+  * Responsive things
+   */
+
   @include mobile() {
-    height: 15rem;
+    width: 100%;
+    border: 1px solid $color-header-box;
+    height: 25%;
+
+    // height: 15rem;
   }
-  @include tablet() {
-    height: 18rem;
-  }
+
+   @include tablet() {
+     width: 100%;
+     border: 1px solid $color-header-box;
+     height: 25%;
+   }
+
+
   @include desktop() {
-    height: 20rem;
+    // height: 38rem;
+    height: 50%;
+
+    &.top-row {
+      border-top: 0px;
+      border-bottom: 1px solid $color-header-box;
+    }
+    &.bot-row {
+      border-bottom: 0px;
+      border-top: 1px solid $color-header-box;
+    }
+
+    &.top-row-1st,
+    &.bot-row-1st {
+      border-right: 2px solid $color-header-box;
+    }
   }
 }
 
@@ -51,7 +154,7 @@
   }
 
   @include tablet() {
-    height: 28rem;
+    height: 25rem;
   }
 
   @include desktop() {
