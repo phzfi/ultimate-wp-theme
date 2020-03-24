@@ -9,11 +9,6 @@ Suite Teardown   Close Application
 
 *** Test Cases ***
 
-#Check footer links
-#     Go to footer
-#     Element Should Be Visible      class=basic-list__item.Tuotteet
-
-
 Should Check Footer Links
                                 [Template]    Open footer links
     Open eSports link                ${eSport_link}         Smash
