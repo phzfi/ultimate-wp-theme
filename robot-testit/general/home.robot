@@ -27,10 +27,19 @@ Should exercise Services dropdown
 
 
 Should exercise Search functionality
-    Click Element       class=searchform__input
-    Input Text          class=searchform__input     Pharazon
-    Press Keys          class=searchform__input     \\13
-    Wait Until Page Contains    Hätinen
+    Search Text in Page     ${Search_Navbar}    Pharazon    Hätinen
+
+
+Should Exercise Responsive Burger-menu Links
+      [Template]    Open Burger-menu Links
+    Open Values&Mission link    ${Values_Navbar}        /arvot-ja-missio    Arvot ja Missio
+    Open Jobs link              ${Jobs_Navbar}          /rekry.phz.fi       Avoimet
+    Open Contact link           ${Contact_Navbar}       /yhteystiedot       PHZ Full Stack Yhteystiedot
+    Open Services link           ${Services_Navbar}      /products           Euroveloitus
+    Open eSports link           ${eSports_Navbar}       /team.phz.fi        Smash
+    Open Apprien link           ${Apprien_Navbar}       /www.apprien.com    Game API
+    Open PHZ Games link         ${Games_Navbar}         /gs.phz.fi          Forum
+
 
 #Should count readlinks in Head section
 #     Should Contain X Times     class=header      class=card__body    4
