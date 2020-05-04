@@ -7,7 +7,7 @@ ${APP_URL}        	https://phz.fi/
 ${DELAY}         	0
 
 # GUI variables
-${Site_title}       Etusivu - PHZ.FI - Kestävän elinkaaren ohjelmistokehitys
+${Site_title}       Etusivu - PHZ Full Stack Oy
 ${Main_Navbar}      id=main-navbar
 ${Logo_Navbar}                class=navbar__logo
 ${Services_Navbar}       xpath=//*[@id="main-navbar"]/div[1]/div/a    #class=navbar-item.Palvelut
@@ -35,6 +35,13 @@ ${Smash_tab}         class=navbar-item.Smash
 ${Footer_section}    class=footer
 ${Privacy_link}                    xpath=/html/body/footer/div/div[3]/div[2]/a[1]
 ${Terms_link}       xpath=/html/body/footer/div/div[3]/div[2]/a[2]
+#Careers
+${NameJob_field}      id=input_1_1
+${EmailJob_field}      id=input_1_3
+${PhoneJob_field}      id=input_1_4
+${LinkedinJob_field}      id=input_1_5
+${ChooseFile_btn}      id=input_1_6
+${SubmitJob_btn}      id=gform_submit_button_1
 
 
 
@@ -108,3 +115,7 @@ My Foo Bar Keyword
     Do this
     Do that
     [Return]           Some value
+
+Go To Careers Page
+    Click Element       ${jobs_navbar}
+    Wait Until Element Is Visible       ${Submitjob_btn}
