@@ -202,5 +202,20 @@ function add_search_box( $items, $args ) {
         return $items;
 }
 
-?>
+/**
+ * Register our sidebars and widgetized areas.
+ *
+ */
+function ultimatewptheme_widgets_init() {
 
+	register_sidebar( array(
+		'name'          => 'Home right sidebar',
+		'id'            => 'home_right_1',
+		'before_widget' => '<div>',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h2>',
+		'after_title'   => '</h2>',
+	) );
+
+}
+add_action( 'widgets_init', 'ultimatewptheme_widgets_init' );
