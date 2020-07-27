@@ -8,6 +8,7 @@ This is one of the first actually great Wordpress themes created at PHZ Full Sta
    
 ## Initial steps
 1. `vagrant up`
+2. Navigate to http://wordpress.local
 
 ## Concept
     
